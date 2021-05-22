@@ -3,6 +3,7 @@ require 'corelib/numeric'
 class Number < Numeric
   Opal.bridge(`Number`, self)
   `Opal.defineProperty(self.$$prototype, '$$is_number', true)`
+  `Opal.defineProperty(self.$$prototype, '$$is_numeric', true)`
   `self.$$is_number_class = true`
 
   class << self
@@ -19,7 +20,12 @@ class Number < Numeric
         #{raise TypeError, "can't convert #{other.class} into Float"};
       }
       else if (other.$$is_bignum) {
-        return [other, BigInt(self)]
+        if (#{self.integer?}) {
+          return [other, #{Bignum(self)}]
+        }
+        else {
+          return [#{Float(other)}, self]
+        }
       }
       else if (other.$$is_string) {
         return [#{Float(other)}, self];
@@ -145,7 +151,7 @@ class Number < Numeric
 
   def <(other)
     %x{
-      if (other.$$is_number) {
+      if (other.$$is_numeric) {
         return self < other;
       }
       else {
@@ -156,7 +162,7 @@ class Number < Numeric
 
   def <=(other)
     %x{
-      if (other.$$is_number) {
+      if (other.$$is_numeric) {
         return self <= other;
       }
       else {
@@ -167,7 +173,7 @@ class Number < Numeric
 
   def >(other)
     %x{
-      if (other.$$is_number) {
+      if (other.$$is_numeric) {
         return self > other;
       }
       else {
@@ -178,7 +184,7 @@ class Number < Numeric
 
   def >=(other)
     %x{
-      if (other.$$is_number) {
+      if (other.$$is_numeric) {
         return self >= other;
       }
       else {
@@ -191,8 +197,8 @@ class Number < Numeric
   # can be optimized despite a try/finally construct.
   %x{
     var spaceship_operator = function(self, other) {
-      if (other.$$is_number) {
-        if (isNaN(self) || isNaN(other)) {
+      if (other.$$is_numeric) {
+        if (!other.$$is_bignum && !self.$$is_bignum && (isNaN(self) || isNaN(other))) {
           return nil;
         }
 
@@ -286,8 +292,8 @@ class Number < Numeric
 
   def ==(other)
     %x{
-      if (other.$$is_number) {
-        return self.valueOf() === other.valueOf();
+      if (other.$$is_numeric) {
+        return self.valueOf() == other.valueOf();
       }
       else if (#{other.respond_to? :==}) {
         return #{other == self};
