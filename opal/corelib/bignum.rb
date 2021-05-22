@@ -118,7 +118,7 @@ class Bignum < Integer
   def **(other)
     %x{
       if (other.$$is_bignum) {
-        return self ** other;
+        return eval("self ** other");
       }
       else {
         return #{__coerced__ :**, other};
