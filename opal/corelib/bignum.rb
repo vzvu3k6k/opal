@@ -1,5 +1,9 @@
 class Bignum < Integer
-  Opal.bridge(`BigInt`, self)
+  def self.supported?
+    `typeof BigInt !== "undefined"`
+  end
+
+  Opal.bridge(`BigInt`, self) if supported?
   `Opal.defineProperty(self.$$prototype, '$$is_bignum', true)`
   # Technically this is not a number, it has different properties.
   `Opal.defineProperty(self.$$prototype, '$$is_number', false)`
@@ -193,14 +197,26 @@ class Bignum < Integer
 end
 
 class Number
-  def to_bn
-    `BigInt(#{self.to_i})`
+  if Bignum.supported?
+    def to_bn
+      `BigInt(#{self.to_i})`
+    end
+  else
+    def to_bn
+      self.to_i
+    end
   end
 end
 
 class String
-  def to_bn
-    `BigInt(self)`
+  if Bignum.supported?
+    def to_bn
+      `BigInt(self)`
+    end
+  else
+    def to_bn
+      self.to_i
+    end
   end
 end
 
