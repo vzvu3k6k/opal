@@ -454,8 +454,16 @@ class Number < Numeric
     end
 
     %x{
-      var min = Math.abs(self),
-          max = Math.abs(other);
+      var self_ = self;
+      if (self_.$$is_bignum && !other.$$is_bignum) {
+        other = #{other.to_bn};
+      }
+      if (!self_.$$is_bignum && other.$$is_bignum) {
+        self_ = #{self.to_bn};
+      }
+
+      var min = self_ < 0 ? -self_ : self_,
+          max = other < 0 ? -other : other;
 
       while (min > 0) {
         var tmp = min;
@@ -504,7 +512,8 @@ class Number < Numeric
         return 0;
       }
       else {
-        return Math.abs(self * other / #{gcd(other)});
+        var val = self * other / #{gcd(other)};
+        return val < 0 ? -val : val;
       }
     }
   end

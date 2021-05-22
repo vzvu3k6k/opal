@@ -177,6 +177,16 @@ class Bignum < Integer
     `self < 0`
   end
 
+  alias equal? ==
+
+  def even?
+    `self % BigInt(2) === BigInt(0)`
+  end
+
+  def odd?
+    !even?
+  end
+
   alias to_bn itself
 
   def size
@@ -187,11 +197,8 @@ class Bignum < Integer
     `Number(self)`
   end
 
-  def to_i
-    `Math.floor(Number(self))`
-  end
-
-  alias to_int to_i
+  alias to_i itself
+  alias to_int itself
 
   alias inspect to_s
 end
