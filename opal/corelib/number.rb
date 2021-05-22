@@ -18,6 +18,9 @@ class Number < Numeric
       if (other === nil) {
         #{raise TypeError, "can't convert #{other.class} into Float"};
       }
+      else if (other.$$is_bignum) {
+        return [other, BigInt(self)]
+      }
       else if (other.$$is_string) {
         return [#{Float(other)}, self];
       }
@@ -828,19 +831,11 @@ class Number < Numeric
   end
 end
 
-Fixnum = Number
-
-class Integer < Numeric
+class Integer < Number
   `self.$$is_number_class = true`
   `self.$$is_integer_class = true`
 
   class << self
-    def allocate
-      raise TypeError, "allocator undefined for #{name}"
-    end
-
-    undef :new
-
     def sqrt(n)
       n = Opal.coerce_to!(n, Integer, :to_int)
       %x{
@@ -857,16 +852,12 @@ class Integer < Numeric
   MIN = `-Math.pow(2, 30)`
 end
 
-class Float < Numeric
+Fixnum = Number
+
+class Float < Number
   `self.$$is_number_class = true`
 
   class << self
-    def allocate
-      raise TypeError, "allocator undefined for #{name}"
-    end
-
-    undef :new
-
     def ===(other)
       `!!other.$$is_number`
     end
