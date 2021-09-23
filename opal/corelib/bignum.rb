@@ -1,4 +1,4 @@
-class Bignum < Integer
+class Integer < Numeric
   def self.supported?
     `typeof BigInt !== "undefined"`
   end

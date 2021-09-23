@@ -1,7 +1,6 @@
 require 'corelib/numeric'
 
 class Number < Numeric
-  Opal.bridge(`Number`, self)
   `Opal.defineProperty(self.$$prototype, '$$is_number', true)`
   `Opal.defineProperty(self.$$prototype, '$$is_numeric', true)`
   `self.$$is_number_class = true`
@@ -847,6 +846,8 @@ class Number < Numeric
 end
 
 class Integer < Number
+  Opal.bridge(`BigInt`, self)
+
   `self.$$is_number_class = true`
   `self.$$is_integer_class = true`
 
@@ -870,6 +871,8 @@ end
 Fixnum = Number
 
 class Float < Number
+  Opal.bridge(`Number`, self)
+
   `self.$$is_number_class = true`
 
   class << self
