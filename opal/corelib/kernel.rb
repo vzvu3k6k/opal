@@ -1,5 +1,6 @@
 # helpers: truthy, coerce_to, respond_to, Opal
 # use_strict: true
+# pristine: true
 
 module ::Kernel
   def =~(obj)
@@ -628,8 +629,6 @@ module ::Kernel
   def respond_to_missing?(method_name, include_all = false)
     false
   end
-
-  ::Opal.pristine(self, :respond_to?, :respond_to_missing?)
 
   def require(file)
     %x{

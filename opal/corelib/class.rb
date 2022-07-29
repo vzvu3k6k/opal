@@ -1,3 +1,5 @@
+# pristine: true
+
 require 'corelib/module'
 
 class ::Class

@@ -28,6 +28,10 @@ module Opal
           blockopts << "$$source_location: #{source_location}"
         end
 
+        if compiler.pristine?
+          blockopts << "$$pristine: true"
+        end
+
         if blockopts.length == 1
           push ", #{arity}"
         elsif blockopts.length > 1
