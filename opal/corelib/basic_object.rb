@@ -1,4 +1,5 @@
 # use_strict: true
+# pristine: true
 
 class ::BasicObject
   def initialize(*)
@@ -145,8 +146,6 @@ class ::BasicObject
       "undefined method `#{symbol}' for #{inspect_result}", symbol, args
     ), nil, ::Kernel.caller(1)
   end
-
-  ::Opal.pristine(self, :method_missing)
 
   def respond_to_missing?(method_name, include_all = false)
     false
