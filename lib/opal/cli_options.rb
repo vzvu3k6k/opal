@@ -7,7 +7,10 @@ module Opal
   class CLIOptions < OptionParser
     def initialize
       super
-      @options = {}
+      @options = {
+        dce: ENV['OPAL_DCE'],
+        no_cache: ENV['OPAL_NO_CACHE']
+      }
 
       self.banner = 'Usage: opal [options] -- [programfile]'
 
@@ -191,6 +194,10 @@ module Opal
 
       on('--no-cache', 'Disable filesystem cache') do
         options[:no_cache] = true
+      end
+
+      on('--dce', '[EXPERIMENTAL] Enable dead code elimination') do
+        options[:dce] = true
       end
 
       on('--esm', 'Wraps compiled bundle as for ES6 module(requires -c or -L)') do

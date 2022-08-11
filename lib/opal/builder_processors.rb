@@ -16,6 +16,10 @@ module Opal
       end
       attr_reader :source, :filename, :options, :requires, :required_trees, :autoloads
 
+      def reset
+        # noop
+      end
+
       def to_s
         source.to_s
       end
@@ -71,6 +75,10 @@ module Opal
 
     class RubyProcessor < Processor
       handles :rb, :opal
+
+      def reset
+        @compiled = nil
+      end
 
       def source
         compiled.result
