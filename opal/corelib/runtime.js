@@ -1509,7 +1509,7 @@
   // @return [undefined]
   Opal.stub_for = function(method_name) {
 
-    function method_missing_stub() {
+    var method_missing_stub = function () {
       // Copy any given block onto the method_missing dispatcher
       this.$method_missing.$$p = method_missing_stub.$$p;
 
@@ -1522,7 +1522,7 @@
 
       return this.$method_missing.apply(this, [method_name.slice(1)].concat(args_ary));
     }
-
+    method_missing_stub.displayName = method_name + " (stub)"
     method_missing_stub.$$stub = true;
 
     return method_missing_stub;
