@@ -55,6 +55,11 @@ module Opal
         [key, value]
       end.compact.to_h
 
+      # directory is both a runner and compiler option
+      @directory = @compiler_options[:directory]
+      @runner_options[:directory] = @directory
+      @output = File.open(@output, 'w') if @output.is_a?(String) && !@directory
+
       raise ArgumentError, 'no libraries to compile' if @lib_only && @requires.empty?
       raise ArgumentError, 'no runnable code provided (evals or file)' if @evals.empty? && @file.nil? && !@lib_only
       raise ArgumentError, "can't accept evals or file in `library only` mode" if (@evals.any? || @file) && @lib_only
@@ -172,6 +177,7 @@ module Opal
         use_strict
         parse_comments
         esm
+        directory
       ]
     end
 
