@@ -110,6 +110,10 @@ module Opal
         compiled.autoloads
       end
 
+      def npm_dependencies
+        compiled.npm_dependencies
+      end
+
       # Also catch a files with missing extensions and nil.
       def self.match?(other)
         super || File.extname(other.to_s) == ''

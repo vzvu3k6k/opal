@@ -252,6 +252,15 @@ module Opal
     # Access the source code currently processed
     attr_reader :source
 
+    # ESM/CJS imports to be compiled 
+    attr_reader :imports
+
+    # ESM/CJS exports to be compiled
+    attr_reader :exports
+
+    # NPM dependencies, to be handled by builder appropriately
+    attr_reader :npm_dependencies
+
     # Set if some rewritter caused a dynamic cache result, meaning it's not
     # fit to be cached
     attr_accessor :dynamic_cache_result
@@ -267,6 +276,9 @@ module Opal
       @option_values = {}
       @magic_comments = {}
       @dynamic_cache_result = false
+      @imports = []
+      @exports = []
+      @npm_dependencies = []
     end
 
     # Compile some ruby code to a string.
@@ -614,17 +626,28 @@ module Opal
       end
     end
 
+    def require(mod)
+      self.requires << mod
+
+      # For directory compilation we need to create respective ESM/CJS imports (requires)
+      if directory?
+        self.imports << ["#{Compiler.module_name(mod)}.#{esm? ? 'mjs' : 'js'}", :none, true]
+      end
+    end
+
     # Marshalling for cache shortpath
     def marshal_dump
       [@options, @option_values, @source_map ||= source_map.cache,
        @magic_comments, @result,
-       @required_trees, @requires, @autoloads]
+       @required_trees, @requires, @autoloads,
+       @imports, @exports, @npm_dependencies]
     end
 
     def marshal_load(src)
       @options, @option_values, @source_map,
       @magic_comments, @result,
-      @required_trees, @requires, @autoloads = src
+      @required_trees, @requires, @autoloads,
+      @imports, @exports, @npm_dependencies = src
     end
   end
 end

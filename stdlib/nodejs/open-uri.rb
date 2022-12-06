@@ -1,6 +1,9 @@
+# await: true
+
+::JS.npm_dependency "unxhr", "1.0.1"
+
 module OpenURI
-  @__xmlhttprequest__ = `require('unxhr')`
-  `var __XMLHttpRequest__ = #{@__xmlhttprequest__}.XMLHttpRequest`
+  `var __XMLHttpRequest__ = #{::JS.dynimport("unxhr", "XMLHttpRequest").__await__}`
 
   def self.request(uri)
     %x{

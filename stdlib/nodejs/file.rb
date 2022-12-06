@@ -1,3 +1,5 @@
+# await: true
+
 require 'corelib/file'
 
 %x{
@@ -109,9 +111,9 @@ require 'corelib/file'
 }
 
 class File < IO
-  @__fs__ = `require('fs')`
-  @__path__ = `require('path')`
-  @__util__ = `require('util')`
+  @__fs__ = ::JS.dynimport('fs').__await__
+  @__path__ = ::JS.dynimport('path').__await__
+  @__util__ = ::JS.dynimport('util').__await__
   `var __fs__ = #{@__fs__}`
   `var __path__ = #{@__path__}`
   `var __util__ = #{@__util__}`
@@ -311,7 +313,7 @@ class File < IO
 end
 
 class File::Stat
-  @__fs__ = `require('fs')`
+  @__fs__ = ::JS.dynimport('fs').__await__
   `var __fs__ = #{@__fs__}`
 
   def initialize(path)

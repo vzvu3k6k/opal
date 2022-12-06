@@ -1,9 +1,11 @@
+# await: true
+
 require 'pathname'
 
 class Pathname
   include Comparable
 
-  @__path__ = `require('path')`
+  @__path__ = ::JS.dynimport('path').__await__
   `var __path__ = #{@__path__}`
 
   def absolute?

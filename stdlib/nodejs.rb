@@ -1,3 +1,7 @@
+# await: require
+
+# Ensure all requires are loaded await...
+
 require 'nodejs/base'
 require 'nodejs/kernel'
 require 'nodejs/file'

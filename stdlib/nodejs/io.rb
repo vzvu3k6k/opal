@@ -1,3 +1,5 @@
+# await: true
+
 require 'nodejs/file'
 
 %x{
@@ -17,7 +19,7 @@ require 'nodejs/file'
   }
 }
 
-`var __fs__ = require('fs')`
+`var __fs__ = #{::JS.dynimport('fs').__await__}`
 
 class IO
   @__fs__ = `__fs__`

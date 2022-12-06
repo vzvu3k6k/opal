@@ -1,8 +1,12 @@
+# await: true
+
+::JS.npm_dependency "glob", "7.1.3"
+
 class Dir
-  @__glob__ = `require('glob')`
-  @__fs__ = `require('fs')`
-  @__path__ = `require('path')`
-  @__os__ = `require('os')`
+  @__glob__ = ::JS.dynimport('glob').__await__
+  @__fs__ = ::JS.dynimport('fs').__await__
+  @__path__ = ::JS.dynimport('path').__await__
+  @__os__ = ::JS.dynimport('os').__await__
   `var __glob__ = #{@__glob__}`
   `var __fs__ = #{@__fs__}`
   `var __path__ = #{@__path__}`
